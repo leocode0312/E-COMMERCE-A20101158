@@ -4,11 +4,13 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true, minlegth: 2 },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    password: { type: String, required: true},
-    role: { type: String, enum: ['user', 'admin'], default: 'user' }
-}, { timestamps: true});
+    password: { type: String, required: true },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    isActive: { type: Boolean, default: true }
 
-//hash para la contraseña antes de guardar
+}, { timestamps: true });
+
+// Hash para la contraseña antes de guardar
 UserSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
     const rounds = parseInt(process.env.SALT_ROUNDS || '10', 10);

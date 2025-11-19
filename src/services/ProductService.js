@@ -1,4 +1,3 @@
-// src/services/ProductService.js
 const Product = require('../models/Product');
 
 class ProductService {
@@ -33,9 +32,15 @@ class ProductService {
   }
 
   async delete(id) {
-    return Product.findByIdAndDelete(id);
-  }
 
+    const product = await Product.findById(id);
+
+    if (!product) return null;
+
+    await product.deleteOne();
+
+    return product;
+  }
   async setStock(id, stock) {
     const p = await Product.findById(id);
     if (!p) throw { status: 404, message: 'Producto no encontrado' };

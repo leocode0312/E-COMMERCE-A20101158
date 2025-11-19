@@ -32,9 +32,15 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   const removed = await ProductService.delete(req.params.id);
-  if (!removed) return res.status(404).json({ message: 'Producto no encontrado' });
-  res.status(204).send();
+  if (!removed) 
+    return res.status(404).json({ message: 'Producto no encontrado' });
+
+  return res.json({ 
+    message: 'Producto eliminado correctamente',
+    deletedProduct: removed
+    });
 };
+
 
 exports.setStock = async (req, res) => {
   const { error, value } = updateStockSchema.validate(req.body);
